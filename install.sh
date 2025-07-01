@@ -327,8 +327,8 @@ animation_loading() {
 }
 
 INSTALL_WEBSOCKET() {
-wget https://raw.githubusercontent.com/ianexec/LTvpnSystemX/main/ws/install-ws.sh && chmod +x install-ws.sh && ./install-ws.sh
-wget https://raw.githubusercontent.com/ianexec/LTvpnSystemX/main/ws/banner_ssh.sh && chmod +x banner_ssh.sh && ./banner_ssh.sh
+wget https://raw.githubusercontent.com/ianexec/LTvpnSystemX/main/websocket_engine/install-ws.sh && chmod +x install-ws.sh && ./install-ws.sh
+wget https://raw.githubusercontent.com/ianexec/LTvpnSystemX/main/websocket_engine/banner_ssh.sh && chmod +x banner_ssh.sh && ./banner_ssh.sh
 }
 
 INSTALL_BACKUP() {
