@@ -1,0 +1,13 @@
+[Unit]
+Description=Kill Akun Vmess yang Melebihi IP Limit
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/python3 /usr/local/bin/killVL.py
+Restart=always
+RestartSec=10
+StandardOutput=null
+StandardError=null
+
+[Install]
+WantedBy=multi-user.target

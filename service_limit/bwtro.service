@@ -1,0 +1,14 @@
+[Unit]
+Description=Limit Kuota Vmess Xray by LunaticTunnel
+Documentation=https://t.me/lunaticproject
+After=network.target nss-lookup.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /etc/xray/troQUOTA
+Restart=on-failure
+User=root
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target
