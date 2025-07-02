@@ -3,7 +3,7 @@
 rm -f $0
 
 file_path="/etc/handeling"
-repo="https://raw.githubusercontent.com/ianexec/LTvpnSystemX/main"
+GIT_CMD="https://raw.githubusercontent.com/ianexec/LTvpnSystemX/main"
 
 apt update
 apt install python3 -y
@@ -23,7 +23,7 @@ else
 fi
 
 cd /usr/local/bin
-wget -q -O vpn.zip "${repo}/websocket_engine/vpn.zip"
+wget -q -O vpn.zip "${GIT_CMD}/websocket_engine/vpn.zip"
 unzip vpn.zip
 cp ws ws-ovpn
 chmod +x ws ws-ovpn
