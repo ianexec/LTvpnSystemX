@@ -334,7 +334,7 @@ wget https://raw.githubusercontent.com/ianexec/LTvpnSystemX/main/websocket_engin
 INSTALL_BACKUP() {
 apt install rclone
 printf "q\n" | rclone config
-wget -O /root/.config/rclone/rclone.conf "https://github.com/ianexec/newltxv7/raw/v7project/rclone.conf"
+wget -O /root/.config/rclone/rclone.conf "https://raw.githubusercontent.com/ianexec/LTvpnSystemX/main/rclone.conf"
 git clone https://github.com/ianexec/wondershaper.git
 cd wondershaper
 make install
@@ -479,7 +479,7 @@ echo -e "\e[97;1m    INSTALLED PACKAGES MODULE   \e[0m"
 echo -e "\e[91;1m ================================ \e[0m"
 cd
 wget https://raw.githubusercontent.com/ianexec/LTvpnSystemX/main/tools_network/pkg_installer.sh && chmod +x pkg_installer.sh && ./pkg_installer.sh
-wget -q -O /etc/luantic/port.txt "https://raw.githubusercontent.com/ianexec/LTvpnSystemX/main/port.txt"
+wget -q -O /etc/port.txt "https://raw.githubusercontent.com/ianexec/LTvpnSystemX/main/port.txt"
 
 clear
 start=$(date +%s)
@@ -562,8 +562,6 @@ rm -f /root/*.txt
 function SENDER_NOTIFICATION() {
 CHATID="7428226275"
 KEY="7382456251:AAFFC-8A6VsotlfAQj6MXe4Mff-7MNX5yRs"
-echo "$KEY" > /etc/lunatic/bot/notif/key
-echo "$CHATID" >> /etc/lunatic/bot/notif/id
 URL="https://api.telegram.org/bot$KEY/sendMessage"
 TEXT="
 <code>= = = = = = = = = = = = =</code>
@@ -603,8 +601,6 @@ echo  ""
 echo -e "\e[92;1m dalam 3 detik akan Melakukan reboot.... \e[0m"
 
 SENDER_NOTIFICATION
-
-sleep 3
 
 clear
 # Langsung reboot
