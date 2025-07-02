@@ -1,3 +1,10 @@
-# Lunatic Tunneling
-# Dean Lunatic
+# setup
 <pre><code>wget --no-check-certificate https://raw.githubusercontent.com/ianexec/LTvpnSystemX/main/install.sh && chmod +x install.sh && ./install.sh</code></pre>
+# Os Support
+- ubuntu 20.04
+- ubuntu 22.04
+- ubuntu 24.04
+- ubuntu 24.10
+- debian 10
+- debian 11
+- debian 12
