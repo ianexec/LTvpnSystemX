@@ -4,7 +4,7 @@ apt dist-upgrade -y
 apt install iptables iptables-persistent netfilter-persistent -y
 apt-get remove --purge ufw firewalld -y # matikan firewalld
 apt install -y screen bzip2 gzip vnstat coreutils rsyslog iftop zip unzip apt-transport-https build-essential -y
-REPO="https://raw.githubusercontent.com/ianexec/LTvpnSystemX/main/"
+GIT_REPO="https://raw.githubusercontent.com/ianexec/LTvpnSystemX/main/"
 # initializing var
 export DEBIAN_FRONTEND=noninteractive
 MYIP=$(wget -qO- ipinfo.io/ip)
@@ -31,7 +31,7 @@ commonname=none
 email=none
 
 # simple password minimal
-curl -sS ${REPO}ssh_module/password | openssl aes-256-cbc -d -a -pass pass:scvps07gg -pbkdf2 > /etc/pam.d/common-password
+curl -sS ${GIT_REPO}ssh_module/password | openssl aes-256-cbc -d -a -pass pass:scvps07gg -pbkdf2 > /etc/pam.d/common-password
 chmod +x /etc/pam.d/common-password
 
 # go to root
@@ -95,7 +95,7 @@ apt-get --reinstall --fix-missing install -y bzip2 gzip coreutils wget screen rs
 apt -y install nginx php php-fpm php-cli php-mysql libxml-parser-perl
 rm /etc/nginx/sites-enabled/default
 rm /etc/nginx/sites-available/default
-curl ${REPO}ssh_module/nginx.conf > /etc/nginx/nginx.conf
+curl ${GIT_REPO}ssh_module/nginx.conf > /etc/nginx/nginx.conf
 sed -i 's/listen = \/var\/run\/php-fpm.sock/listen = 127.0.0.1:9000/g' /etc/php/fpm/pool.d/www.conf
 mkdir -p /var/www/html
 echo "<?php phpinfo() ?>" > /var/www/html/info.php
@@ -107,7 +107,7 @@ cat > /var/www/html/index.html <<-END
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <kepala>
-<meta http-equiv="REFRESH" content="0;url=https://wa.me/+6287764628807">
+<meta http-equiv="REFRESH" content="0;url=https://wa.me/6282131861788">
 </kepala>
 <tubuh>
 <p>Pengalihan URL</p>
@@ -118,11 +118,11 @@ END
 
 # install badvpn
 cd
-wget -O /usr/sbin/badvpn "${REPO}ssh_module/badvpn" >/dev/null 2>&1
+wget -O /usr/sbin/badvpn "${GIT_REPO}ssh_module/badvpn" >/dev/null 2>&1
 chmod +x /usr/sbin/badvpn > /dev/null 2>&1
-wget -q -O /etc/systemd/system/badvpn1.service "${REPO}ssh_module/badvpn1.service" >/dev/null 2>&1
-wget -q -O /etc/systemd/system/badvpn2.service "${REPO}ssh_module/badvpn2.service" >/dev/null 2>&1
-wget -q -O /etc/systemd/system/badvpn3.service "${REPO}ssh_module/badvpn3.service" >/dev/null 2>&1
+wget -q -O /etc/systemd/system/badvpn1.service "${GIT_REPO}ssh_module/badvpn1.service" >/dev/null 2>&1
+wget -q -O /etc/systemd/system/badvpn2.service "${GIT_REPO}ssh_module/badvpn2.service" >/dev/null 2>&1
+wget -q -O /etc/systemd/system/badvpn3.service "${GIT_REPO}ssh_module/badvpn3.service" >/dev/null 2>&1
 systemctl disable badvpn1 
 systemctl stop badvpn1 
 systemctl enable badvpn1
@@ -153,12 +153,12 @@ echo "=== Install Dropbear ==="
 apt -y install dropbear
 sudo dropbearkey -t dss -f /etc/dropbear/dropbear_dss_host_key
 sudo chmod 600 /etc/dropbear/dropbear_dss_host_key
-wget -O /etc/default/dropbear "${REPO}ssh_module/dropbear"
+wget -O /etc/default/dropbear "${GIT_REPO}ssh_module/dropbear"
 echo "/bin/false" >> /etc/shells
 echo "/usr/sbin/nologin" >> /etc/shells
 /etc/init.d/ssh restart
 /etc/init.d/dropbear restart
-#wget -q ${REPO}ssh_module/setrsyslog.sh && chmod +x setrsyslog.sh && ./setrsyslog.sh
+#wget -q ${GIT_REPO}ssh_module/setrsyslog.sh && chmod +x setrsyslog.sh && ./setrsyslog.sh
 
 detect_os() {
   if [[ -f /etc/os-release ]]; then
@@ -230,7 +230,7 @@ else
 fi
 # Unduh file konfigurasi
 echo "Mengunduh file konfigurasi Squid..."
-wget -O /etc/squid/squid.conf "${REPO}ssh_module/squid3.conf"
+wget -O /etc/squid/squid.conf "${GIT_REPO}ssh_module/squid3.conf"
 
 # Ganti placeholder dengan alamat IP
 echo "Mengganti placeholder IP dengan alamat IP saat ini..."
@@ -264,7 +264,7 @@ systemctl enable haproxy
 systemctl start haproxy
 
 #OpenVPN
-wget ${REPO}ssh_module/vpn.sh &&  chmod +x vpn.sh && ./vpn.sh
+wget ${GIT_REPO}ssh_module/vpn.sh &&  chmod +x vpn.sh && ./vpn.sh
 wget https://github.com/busyloop/lolcat/archive/master.zip
 unzip master.zip
 rm -f master.zip
@@ -345,9 +345,9 @@ happy conneting
 END
 
 #install bbr dan optimasi kernel
-wget ${REPO}ssh_module/bbr.sh && chmod +x bbr.sh && ./bbr.sh
+wget ${GIT_REPO}ssh_module/bbr.sh && chmod +x bbr.sh && ./bbr.sh
 
-wget -q ${REPO}ssh_module/ipserver && chmod +x ipserver && ./ipserver
+wget -q ${GIT_REPO}ssh_module/ipserver && chmod +x ipserver && ./ipserver
 # blokir torrent
 iptables -A FORWARD -m string --string "get_peers" --algo bm -j DROP
 iptables -A FORWARD -m string --string "announce_peer" --algo bm -j DROP
