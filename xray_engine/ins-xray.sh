@@ -423,33 +423,64 @@ Restart=on-abort
 WantedBy=multi-user.target
 EOF
 
-#nginx config
+# Xray config
 wget -O /etc/nginx/conf.d/xray.conf "${REPO}xray_engine/xray.conf"
+# haproxy config
 wget -O /etc/haproxy/haproxy.cfg "${REPO}xray_engine/haproxy.cfg"
+
 sed -i 's/xxx/$domain/' /etc/nginx/conf.d/xray.conf
 sed -i 's/xxx/$domain/' /etc/haproxy/haproxy.cfg
 cat /etc/xray/xray.key /etc/xray/xray.crt | tee /etc/haproxy/hap.pem
-echo -e "$yell[SERVICE]$NC Restart All service"
-systemctl daemon-reload
-sleep 0.5
-echo -e "[ ${green}ok${NC} ] Enable & restart xray "
-systemctl daemon-reload
-systemctl enable xray
-systemctl restart xray
-systemctl restart nginx
-systemctl enable haproxy
-systemctl restart haproxy
-systemctl enable runn
-systemctl restart runn
 
-sleep 0.5
-yellow() { echo -e "\\033[33;1m${*}\\033[0m"; }
-yellow "xray/Vmess"
-yellow "xray/Vless"
+# === WARNA ===
+NC='\e[0m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
 
-mv /root/domain /etc/xray/
-if [ -f /root/scdomain ];then
-rm /root/scdomain > /dev/null 2>&1
+log() {
+    echo -e "[${GREEN}INFO${NC}] $1"
+}
+
+warn() {
+    echo -e "${YELLOW}$1${NC}"
+}
+
+# === FUNGSI RESTART SERVICE SECARA AMAN ===
+restart_service() {
+    local service_name=$1
+    systemctl enable --now "$service_name" >/dev/null 2>&1
+    if systemctl is-active --quiet "$service_name"; then
+        log "Service '$service_name' berhasil dijalankan."
+    else
+        echo -e "[\033[0;31mERROR\033[0m] Gagal menjalankan service '$service_name'."
+    fi
+}
+
+# === PROSES ===
+echo -e "${YELLOW}[SERVICE] Restarting All Services...${NC}"
+systemctl daemon-reload
+sleep 0.3
+
+restart_service xray
+restart_service nginx
+restart_service haproxy
+restart_service runn
+
+# === INFORMASI TAMBAHAN ===
+warn "Service aktif: xray/vmess"
+warn "Service aktif: xray/vless"
+
+# === PINDAH DOMAIN & CLEANUP ===
+if [[ -f /root/domain ]]; then
+    mv /root/domain /etc/xray/
+    log "File domain dipindahkan ke /etc/xray/"
 fi
+
+if [[ -f /root/scdomain ]]; then
+    rm -f /root/scdomain >/dev/null 2>&1
+    log "File scdomain dibersihkan"
+fi
+
+# === HAPUS INSTALASI ===
+rm -f ins-xray.sh
 clear
-rm -r ins-xray.sh
