@@ -149,6 +149,7 @@ checking_sc
 clear
 
 
+
 function ARCHITECTURE() {
 if [[ "$( uname -m | awk '{print $1}' )" == "x86_64" ]]; then
     echo -ne
@@ -167,14 +168,16 @@ else
     echo -e " - ${y}Ubuntu 22.04${NC}"
     echo -e " - ${y}Ubuntu 23.04${NC}"
     echo -e " - ${y}Ubuntu 24.04${NC}"
+    echo -e " - ${y}Ubuntu 24.10${NC}"    
     echo ""
     echo -e " - ${y}Debian 10${NC}"
     echo -e " - ${y}Debian 11${NC}"
     echo -e " - ${y}Debian 12${NC}"
+    
     exit 0
 fi
 
-if [[ ${VERSION_ID} == "10" || ${VERSION_ID} == "11" || ${VERSION_ID} == "12" || ${VERSION_ID} == "20.04" || ${VERSION_ID} == "21.04" || ${VERSION_ID} == "22.04" || ${VERSION_ID} == "23.04" || ${VERSION_ID} == "24.04" ]]; then
+if [[ ${VERSION_ID} == "10" || ${VERSION_ID} == "11" || ${VERSION_ID} == "12" || ${VERSION_ID} == "20.04" || ${VERSION_ID} == "21.04" || ${VERSION_ID} == "22.04" || ${VERSION_ID} == "23.04" || ${VERSION_ID} == "24.04" || ${VERSION_ID} == "24.10" ]]; then
     echo -ne
 else
     echo -e " ${r}This Script only Support for OS"
@@ -184,10 +187,12 @@ else
     echo -e " - ${y}Ubuntu 22.04${NC}"
     echo -e " - ${y}Ubuntu 23.04${NC}"
     echo -e " - ${y}Ubuntu 24.04${NC}"
+    echo -e " - ${y}Ubuntu 24.10${NC}"        
     echo ""
     echo -e " - ${y}Debian 10${NC}"
     echo -e " - ${y}Debian 11${NC}"
     echo -e " - ${y}Debian 12${NC}"
+    
     exit 0
 fi
 
@@ -199,7 +204,6 @@ fi
 
 # call
 ARCHITECTURE
-
 clear
 
 function MakeDirectories() {
