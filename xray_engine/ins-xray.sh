@@ -11,9 +11,8 @@ CYAN='\033[0;36m'
 LIGHT='\033[0;37m'
 # ==========================================
 # Getting
-REPO="https://raw.githubusercontent.com/ianexec/LTvpnSystemX/main/"
-echo -e "
-"
+REPOMEX="https://raw.githubusercontent.com/ianexec/anjink/main/"
+echo -e ""
 date
 echo ""
 cd
@@ -62,7 +61,7 @@ touch /var/log/xray/error.log
 touch /var/log/xray/access2.log
 touch /var/log/xray/error2.log
 # / / Ambil Xray Core Version Terbaru
-#latest_version="$(curl -s https://api.github.com/repos/XTLS/Xray-core/releases | grep tag_name | sed -E 's/.*"v(.*)".*/\1/' | head -n 1)"
+#latest_version="$(curl -s https://api.github.com/REPOMEXs/XTLS/Xray-core/releases | grep tag_name | sed -E 's/.*"v(.*)".*/\1/' | head -n 1)"
 bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ install -u www-data --version 24.10.31
 
 ## crt xray
@@ -383,8 +382,8 @@ WantedBy=multi-user.target
 EOF
 
 #nginx config
-wget -O /etc/nginx/conf.d/xray.conf "${REPO}xray_engine/xray.conf"
-wget -O /etc/haproxy/haproxy.cfg "${REPO}xray_engine/haproxy.cfg"
+wget -O /etc/nginx/conf.d/xray.conf "${REPOMEX}xray_engine/xray.conf"
+wget -O /etc/haproxy/haproxy.cfg "${REPOMEX}xray_engine/haproxy.cfg"
 sed -i 's/xxx/$domain/' /etc/nginx/conf.d/xray.conf
 sed -i 's/xxx/$domain/' /etc/haproxy/haproxy.cfg
 cat /etc/xray/xray.key /etc/xray/xray.crt | tee /etc/haproxy/hap.pem
