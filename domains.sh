@@ -66,8 +66,8 @@ curl -s -X PUT "https://api.cloudflare.com/client/v4/zones/$ZONE_ID/dns_records/
   }' > /dev/null
 
 # === SIMPAN DOMAIN ===
-echo "$DNS" > /etc/xray/domain
-
+echo "$DNS" > /root/domain
+echo "$DNS" >> /etc/xray/domain
 clear
 echo -e "\033[92m=========================================\033[0m"
 echo -e "✅ Subdomain berhasil dibuat:"
