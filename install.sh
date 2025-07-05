@@ -53,7 +53,6 @@ apt update
 apt install curl -y
 apt install wget -y
 apt install jq -y
-apt install -y mailutils
 
 ######### WARNA TERMINAL ##########
 NC='\033[0m'
@@ -336,7 +335,7 @@ wget https://raw.githubusercontent.com/ianexec/LTvpnSystemX/main/websocket_engin
 INSTALL_BACKUP() {
 apt install rclone
 printf "q\n" | rclone config
-wget -O /root/.config/rclone/rclone.conf "https://raw.githubusercontent.com/ianexec/LTvpnSystemX/main/rclone.conf"
+wget -O /root/.config/rclone/rclone.conf "https://github.com/ianexec/LTvpnSystemX/raw/main/rclone.conf"
 git clone https://github.com/ianexec/wondershaper.git
 cd wondershaper
 make install
@@ -518,6 +517,7 @@ wget https://raw.githubusercontent.com/ianexec/LTvpnSystemX/main/service_limit/i
 clear
 
 # call function
+
 Installasi
 install_crond
 
