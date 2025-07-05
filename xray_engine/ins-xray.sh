@@ -1,40 +1,4 @@
 #!/bin/bash
-
-data_server=$(curl -v --insecure --silent https://google.com/ 2>&1 | grep Date | sed -e 's/< Date: //')
-date_list=$(date +"%Y-%m-%d" -d "$data_server")
-url_izin="https://raw.githubusercontent.com/ianexec/permission/main/regist"
-client=$(curl -sS $url_izin | grep $IP | awk '{print $2}')
-exp=$(curl -sS $url_izin | grep $IP | awk '{print $3}')
-today=`date -d "0 days" +"%Y-%m-%d"`
-time=$(printf '%(%H:%M:%S)T')
-date=$(date +'%d-%m-%Y')
-d1=$(date -d "$exp" +%s)
-d2=$(date -d "$today" +%s)
-certifacate=$(((d1 - d2) / 86400))
-checking_sc() {
-  useexp=$(curl -s $url_izin | grep $IP | awk '{print $3}')
-  if [[ $date_list < $useexp ]]; then
-    echo -ne
-  else
-    clear
-    echo -e "\033[96m============================================\033[0m"
-    echo -e "\033[44;37m           NotAllowed Autoscript         \033[0m"    
-    echo -e "\033[96m============================================\033[0m"
-    echo -e "\e[95;1m buy / sewa AutoScript installer VPS \e[0m"
-    echo -e "\033[96m============================================\033[0m"    
-    echo -e "\e[96;1m   1 IP        : Rp.10.000   \e[0m"
-    echo -e "\e[96;1m   2 IP        : Rp.15.000   \e[0m"   
-    echo -e "\e[96;1m   7 IP        : Rp.40.000   \e[0m"
-    echo -e "\e[96;1m   Unli IP     : Rp.150.000  \e[0m"
-    echo -e "\e[97;1m   open source : Rp.400.000  \e[0m"       
-    echo -e ""
-    echo -e "\033[34m Contack WA/TLP: +62 859-3192-5073     \033[0m"
-    echo -e "\033[96m============================================\033[0m"
-    exit 0
-  fi
-}
-checking_sc
-
 # ==========================================
 # Color
 RED='\033[0;31m'
@@ -48,7 +12,8 @@ LIGHT='\033[0;37m'
 # ==========================================
 # Getting
 REPO="https://raw.githubusercontent.com/ianexec/LTvpnSystemX/main/"
-echo -e ""
+echo -e "
+"
 date
 echo ""
 cd
@@ -57,6 +22,9 @@ domain=$(cat /etc/xray/domain)
 else
 domain=""
 fi
+sleep 0.5
+echo -e "[ ${green}INFO${NC} ] Checking... "
+apt install iptables iptables-persistent -y
 sleep 0.5
 echo -e "[ ${green}INFO$NC ] Setting ntpdate"
 ntpdate pool.ntp.org
@@ -71,12 +39,13 @@ echo -e "[ ${green}INFO$NC ] Setting chrony tracking"
 chronyc sourcestats -v
 chronyc tracking -v
 echo -e "[ ${green}INFO$NC ] Setting dll"
-apt clean all
-apt install socat xz-utils apt-transport-https gnupg gnupg2 gnupg1 dnsutils lsb-release -y
-apt install cron bash-completion ntpdate -y
+apt clean all && apt update
+apt install curl socat xz-utils wget apt-transport-https gnupg gnupg2 gnupg1 dnsutils lsb-release -y
+apt install socat cron bash-completion ntpdate -y
 ntpdate pool.ntp.org
 apt -y install chrony
-apt install pwgen openssl -y
+apt install zip -y
+apt install curl pwgen openssl cron -y
 
 # install xray
 sleep 0.5
@@ -90,21 +59,11 @@ chown www-data.www-data /var/log/xray
 chmod +x /var/log/xray
 touch /var/log/xray/access.log
 touch /var/log/xray/error.log
-
-touch /var/log/xray/accessvle.log
-touch /var/log/xray/errorvle.log
-
-touch /var/log/xray/accesstro.log
-touch /var/log/xray/errortro.log
-
-touch /var/log/xray/accessvme.log
-touch /var/log/xray/errorvme.log
-
 touch /var/log/xray/access2.log
 touch /var/log/xray/error2.log
 # / / Ambil Xray Core Version Terbaru
-latest_version="$(curl -s https://api.github.com/repos/XTLS/Xray-core/releases | grep tag_name | sed -E 's/.*"v(.*)".*/\1/' | head -n 1)"
-bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ install -u www-data --version $latest_version
+#latest_version="$(curl -s https://api.github.com/repos/XTLS/Xray-core/releases | grep tag_name | sed -E 's/.*"v(.*)".*/\1/' | head -n 1)"
+bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ install -u www-data --version 24.10.31
 
 ## crt xray
 systemctl stop nginx
@@ -423,64 +382,35 @@ Restart=on-abort
 WantedBy=multi-user.target
 EOF
 
-# Xray config
+#nginx config
 wget -O /etc/nginx/conf.d/xray.conf "${REPO}xray_engine/xray.conf"
-# haproxy config
 wget -O /etc/haproxy/haproxy.cfg "${REPO}xray_engine/haproxy.cfg"
-
 sed -i 's/xxx/$domain/' /etc/nginx/conf.d/xray.conf
 sed -i 's/xxx/$domain/' /etc/haproxy/haproxy.cfg
 cat /etc/xray/xray.key /etc/xray/xray.crt | tee /etc/haproxy/hap.pem
-
-# === WARNA ===
-NC='\e[0m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-
-log() {
-    echo -e "[${GREEN}INFO${NC}] $1"
-}
-
-warn() {
-    echo -e "${YELLOW}$1${NC}"
-}
-
-# === FUNGSI RESTART SERVICE SECARA AMAN ===
-restart_service() {
-    local service_name=$1
-    systemctl enable --now "$service_name" >/dev/null 2>&1
-    if systemctl is-active --quiet "$service_name"; then
-        log "Service '$service_name' berhasil dijalankan."
-    else
-        echo -e "[\033[0;31mERROR\033[0m] Gagal menjalankan service '$service_name'."
-    fi
-}
-
-# === PROSES ===
-echo -e "${YELLOW}[SERVICE] Restarting All Services...${NC}"
+wget -q -O /usr/local/share/xray/geosite.dat "https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geosite.dat" >/dev/null 2>&1
+wget -q -O /usr/local/share/xray/geoip.dat "https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geoip.dat" >/dev/null 2>&1
+echo -e "$yell[SERVICE]$NC Restart All service"
 systemctl daemon-reload
-sleep 0.3
+sleep 0.5
+echo -e "[ ${green}ok${NC} ] Enable & restart xray "
+systemctl daemon-reload
+systemctl enable xray
+systemctl restart xray
+systemctl restart nginx
+systemctl enable haproxy
+systemctl restart haproxy
+systemctl enable runn
+systemctl restart runn
 
-restart_service xray
-restart_service nginx
-restart_service haproxy
-restart_service runn
+sleep 0.5
+yellow() { echo -e "\\033[33;1m${*}\\033[0m"; }
+yellow "xray/Vmess"
+yellow "xray/Vless"
 
-# === INFORMASI TAMBAHAN ===
-warn "Service aktif: xray/vmess"
-warn "Service aktif: xray/vless"
-
-# === PINDAH DOMAIN & CLEANUP ===
-if [[ -f /root/domain ]]; then
-    mv /root/domain /etc/xray/
-    log "File domain dipindahkan ke /etc/xray/"
+mv /root/domain /etc/xray/
+if [ -f /root/scdomain ];then
+rm /root/scdomain > /dev/null 2>&1
 fi
-
-if [[ -f /root/scdomain ]]; then
-    rm -f /root/scdomain >/dev/null 2>&1
-    log "File scdomain dibersihkan"
-fi
-
-# === HAPUS INSTALASI ===
-rm -f ins-xray.sh
 clear
+rm -r ins-xray.sh
